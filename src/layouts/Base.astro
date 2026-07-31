@@ -70,14 +70,20 @@ const isHome = here === url('/');
 
       <footer class="site-footer">
         {
-          links.map((link) => (
-            <a
-              href={link.href.startsWith('/') ? url(link.href) : link.href}
-              rel={link.href.startsWith('http') ? 'me noopener' : undefined}
-            >
-              {link.label}
-            </a>
-          ))
+          links.map((link) => {
+            const isExternal = /^https?:\/\//i.test(link.href);
+            // The résumé is a PDF — a new tab keeps the site behind it.
+            const newTab = isExternal || link.href.endsWith('.pdf');
+            return (
+              <a
+                href={link.href.startsWith('/') ? url(link.href) : link.href}
+                target={newTab ? '_blank' : undefined}
+                rel={isExternal ? 'me noopener noreferrer' : undefined}
+              >
+                {link.label}
+              </a>
+            );
+          })
         }
       </footer>
     </div>
