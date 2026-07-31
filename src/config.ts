@@ -20,8 +20,8 @@ export const links = [
   { label: 'X/Twitter', href: 'https://x.com/manav24_' },
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/manav-darji/' },
   { label: 'Telegram', href: 'https://t.me/Manav2401' },
-  // Drop the PDF at public/resume.pdf and this link works.
-  { label: 'Resume', href: '/resume.pdf' },
+  // Lives at public/Manav_Darji_Resume_2026.pdf.
+  { label: 'Resume', href: '/Manav_Darji_Resume_2026.pdf' },
 ];
 
 /**

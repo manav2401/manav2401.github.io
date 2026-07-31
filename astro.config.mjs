@@ -2,24 +2,30 @@
 import { defineConfig } from 'astro/config';
 
 /**
- * Opens external links in a new tab, leaving internal ones alone.
+ * Opens links in a new tab when leaving the site — anything external, plus
+ * PDFs. A PDF is internal but replaces the page with a document viewer, so
+ * the site is better left open behind it.
  *
  * Written inline rather than adding the `rehype-external-links` package — a
  * rehype plugin is just a function over the HTML tree, and this is a dozen
  * lines against one more dependency to keep current.
  *
- * Internal links deliberately stay in the same tab: forcing your own pages
- * into new tabs breaks the back button and piles up windows.
+ * Ordinary internal links deliberately stay in the same tab: forcing your
+ * own pages into new tabs breaks the back button and piles up windows.
  */
-function rehypeExternalLinksInNewTab() {
+function rehypeLinksInNewTab() {
   /** @param {any} node */
   const visit = (node) => {
     if (node.tagName === 'a' && node.properties) {
       const href = node.properties.href;
-      if (typeof href === 'string' && /^https?:\/\//i.test(href)) {
-        node.properties.target = '_blank';
-        // noopener stops the opened page reaching back via window.opener.
-        node.properties.rel = 'noopener noreferrer';
+      if (typeof href === 'string') {
+        const isExternal = /^https?:\/\//i.test(href);
+        const isPdf = /\.pdf($|[?#])/i.test(href);
+        if (isExternal || isPdf) {
+          node.properties.target = '_blank';
+          // noopener stops the opened page reaching back via window.opener.
+          node.properties.rel = 'noopener noreferrer';
+        }
       }
     }
     for (const child of node.children ?? []) visit(child);
@@ -57,7 +63,7 @@ export default defineConfig({
     // GitHub-flavoured markdown: tables, strikethrough, footnotes, autolinks.
     // On by default, set explicitly so an upgrade can't silently change it.
     gfm: true,
-    rehypePlugins: [rehypeExternalLinksInNewTab],
+    rehypePlugins: [rehypeLinksInNewTab],
     shikiConfig: {
       // Light theme only — the site has no dark mode.
       theme: 'github-light',

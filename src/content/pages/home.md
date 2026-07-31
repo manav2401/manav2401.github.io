@@ -8,7 +8,7 @@ Some of the domains I am interested in are distributed systems and consensus, me
 
 Outside work, I touch grass, work out, listen to hip-hop and watch movies.
 
-* Checkout my resume for full work history.
+* Checkout my [resume](/Manav_Darji_Resume_2026.pdf) for full work history.
 * I have recently started writing some technical articles. Do check it out in the [writing](/writing/) section.
 * I am also maintaining a list of interesting things I've read or watched recently. Check out the [bookmarks](/bookmarks/) section.
 
