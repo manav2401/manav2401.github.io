@@ -1,0 +1,35 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+// Every markdown file in src/content/pages/ becomes a top-level page:
+//   about.md        → /about/
+//   projects.md     → /projects/
+//   now.md          → /now/            (just add the file — no code change)
+//   notes/travel.md → /notes/travel/   (subfolders work too)
+//
+// It's a rest parameter ([...page]) rather than [page] so that nested folders,
+// which the glob loader turns into ids containing a slash, still resolve.
+//
+// home.md is skipped because the homepage renders it itself.
+export const getStaticPaths = (async () => {
+  const pages = await getCollection(
+    'pages',
+    ({ id, data }) => id !== 'home' && !data.draft
+  );
+
+  return pages.map((page) => ({
+    params: { page: page.id },
+    props: { page },
+  }));
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+const { Content } = await render(page);
+---
+
+<Base title={page.data.title} description={page.data.description}>
+  <h1>{page.data.title}</h1>
+  <Content />
+</Base>

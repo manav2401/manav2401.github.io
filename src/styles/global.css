@@ -1,0 +1,559 @@
+/* ==========================================================================
+   Design system
+
+   The whole look of the site is in this file. No utility classes, no
+   framework, no CSS anywhere else. Tune it here.
+
+   The organising idea: the serif carries everything you read, including the
+   header and footer. The monospace is reserved for dates and small labels —
+   the things you scan rather than read.
+   ========================================================================== */
+
+:root {
+  /* ── Typefaces ──────────────────────────────────────────────────────────
+     Swap which --font-serif line is commented out to change the body face.
+     The active one is the system Times stack: zero bytes downloaded, no
+     layout shift, renders identically on every Mac.                        */
+  --font-serif: "Times New Roman", Times, Georgia, serif;
+
+  /* Alternatives — comment out the line above, uncomment one of these.
+     All are sturdier than Times on a white background, and all are already
+     on macOS, so nothing is downloaded. */
+  /* --font-serif: Charter, "Bitstream Charter", Georgia, serif; */
+  /* --font-serif: "Iowan Old Style", Georgia, serif; */
+  /* --font-serif: Georgia, serif; */
+
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* ── Colour ─────────────────────────────────────────────────────────────
+     Warm off-white rather than pure #fff, and a warm near-black rather than
+     pure #000 — easier on the eye and less clinical. Light only, no dark
+     mode.                                                                  */
+  --color-bg: #fcfcfa;
+  --color-text: #12120f;
+  --color-muted: #5f5c57;
+  --color-rule: #e2e0da;
+  --color-mark: #b3afa7;
+  --color-code-bg: #f4f3ef;
+
+  /* ── Stroke weight ──────────────────────────────────────────────────────
+     THIS IS THE BOLDNESS KNOB. Times has no medium weight, so the way to
+     thicken it slightly is a hairline stroke around each glyph.
+       0        off, pure Times
+       0.15px   barely there
+       0.18px   current
+       0.25px   clearly heavier
+       0.35px+  starts looking smudged — don't
+     Note: `font-weight: 500` will do NOTHING here. Times ships only regular
+     and bold, and font-synthesis-weight below blocks fake in-between
+     weights on purpose (they look terrible).                              */
+  --ink: 0.20px;
+
+  /* The single accent, used only for link hover and focus rings.
+     For a completely monochrome site, set this to: currentColor            */
+  --color-accent: #2f5d7c;
+
+  /* ── Measure & rhythm ───────────────────────────────────────────────────
+     38rem ≈ 608px ≈ 34em of body text, and 1.5 leading — both measured off
+     the reference design. Tighter than this and it feels cramped; looser and
+     the page reads longer than it is.                                      */
+  --measure: 38rem;
+  --gutter: 1.5rem;
+  --leading: 1.5;
+  --space: 1.15em;
+}
+
+/* ── Base ────────────────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-serif);
+  font-size: 18px;
+  line-height: var(--leading);
+  font-synthesis-weight: none;
+  -webkit-text-stroke: var(--ink) currentColor;
+  /* No -webkit-font-smoothing: antialiased here on purpose. It thins strokes
+     on macOS and is the usual reason a serif looks washed out on white. */
+}
+
+/* The single centred column every page sits in. */
+.page {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 3.25rem var(--gutter) 4rem;
+}
+
+/* ── Site header ─────────────────────────────────────────────────────────
+   A back link, one level up: a post goes back to /writing, everything else
+   goes home. Absent on the homepage. The label is underlined so it reads as
+   a link; the arrow isn't, so the underline doesn't look ragged.          */
+
+.site-header {
+  margin-bottom: 3rem;
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+}
+
+.site-header .back {
+  color: var(--color-muted);
+  text-decoration: none;
+}
+
+.site-header .back-arrow {
+  margin-right: 0.35em;
+}
+
+.site-header .back-label {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  text-decoration-color: var(--color-mark);
+}
+
+.site-header .back:hover {
+  color: var(--color-accent);
+}
+
+.site-header .back:hover .back-label {
+  text-decoration-color: var(--color-accent);
+}
+
+/* ── Headings ────────────────────────────────────────────────────────────── */
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.25;
+  text-wrap: balance;
+  margin: 0;
+}
+
+/* The page title carries on size alone, so it stays regular weight. */
+h1 {
+  font-size: 1.55rem;
+  font-weight: 400;
+  margin-bottom: 1.5rem;
+}
+
+/* Section headings inside an article ARE bold. A regular-weight serif only a
+   few percent larger than body text is invisible in a long piece — the size
+   step alone can't carry the hierarchy. */
+h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-top: 2.75rem;
+  margin-bottom: 0.5rem;
+}
+
+h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-top: 2.25rem;
+  margin-bottom: 0.35rem;
+}
+
+/* Deepest level: italic rather than another size step. */
+h4 {
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: italic;
+  margin-top: 1.75rem;
+  margin-bottom: 0.3rem;
+}
+
+/* ── Prose ───────────────────────────────────────────────────────────────── */
+
+p {
+  margin: 0 0 var(--space);
+  text-wrap: pretty;
+}
+
+/* Links stay underlined rather than colour-only, so they're still obvious
+   in print, in a screenshot, and to anyone who can't distinguish the hue. */
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  text-decoration-color: var(--color-mark);
+  transition:
+    color 120ms ease,
+    text-decoration-color 120ms ease;
+}
+
+a:hover {
+  color: var(--color-accent);
+  text-decoration-color: var(--color-accent);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+strong {
+  font-weight: 700;
+}
+
+em {
+  font-style: italic;
+}
+
+/* ── Lists ───────────────────────────────────────────────────────────────── */
+
+ul,
+ol {
+  margin: 0 0 var(--space);
+  padding-left: 1.5rem;
+}
+
+ul {
+  list-style: none;
+}
+
+/* Filled round bullets. Rendered via ::before rather than list-style so the
+   size, colour and exact indent are all controllable. */
+ul > li {
+  position: relative;
+}
+
+ul > li::before {
+  content: '\2022';
+  position: absolute;
+  left: -1.1rem;
+  color: var(--color-text);
+  font-size: 0.9em;
+}
+
+li {
+  margin-bottom: 0.3em;
+}
+
+li > ul,
+li > ol {
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+}
+
+/* ── Rules, quotes, media ────────────────────────────────────────────────── */
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--color-rule);
+  margin: 2.5rem 0;
+}
+
+blockquote {
+  margin: 0 0 var(--space);
+  padding-left: 1.1rem;
+  border-left: 1px solid var(--color-rule);
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* Images dropped into a post with ![alt](./file.png). Astro optimises them
+   at build time; these rules just place them on the page. */
+img,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1.6rem 0;
+  border-radius: 2px;
+}
+
+figure {
+  margin: 1.6rem 0;
+}
+
+figure img {
+  margin: 0;
+}
+
+figcaption {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: var(--color-muted);
+  margin-top: 0.6rem;
+}
+
+/* ── Code ────────────────────────────────────────────────────────────────── */
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.82em;
+  background: var(--color-code-bg);
+  /* Kept tight so `code` before a comma doesn't look like it has a space. */
+  padding: 0.1em 0.22em;
+  border-radius: 3px;
+  overflow-wrap: anywhere;
+}
+
+pre {
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  line-height: 1.6;
+  background: var(--color-code-bg) !important;
+  border: 1px solid var(--color-rule);
+  border-radius: 4px;
+  padding: 0.9rem 1rem;
+  overflow-x: auto;
+  margin: 0 0 var(--space);
+}
+
+code,
+pre {
+  -webkit-text-stroke: 0;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
+  overflow-wrap: normal;
+}
+
+/* ── Tables ──────────────────────────────────────────────────────────────
+   Tables fit the reading column and wrap their cells, rather than keeping
+   natural column widths and scrolling sideways. For prose-heavy tables in a
+   38rem column, wrapping reads far better than a horizontal scrollbar.    */
+
+table {
+  width: 100%;
+  max-width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;
+  margin: 0 0 var(--space);
+  font-size: 0.92em;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.5em 0.9em 0.5em 0;
+  border-bottom: 1px solid var(--color-rule);
+  vertical-align: top;
+  overflow-wrap: break-word;
+}
+
+td:last-child,
+th:last-child {
+  padding-right: 0;
+}
+
+/* Serif and bold, NOT uppercase — header cells often contain code or maths
+   (`n`, `q = ⌊2n/3⌋ + 1`) and uppercasing mangles them. */
+th {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+/* ── Footnotes ───────────────────────────────────────────────────────────
+   Astro emits <section data-footnotes class="footnotes">. Both selectors
+   are listed so this survives a future change to the class name.          */
+
+.footnotes,
+[data-footnotes] {
+  position: relative;
+  margin-top: 3rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-rule);
+  font-size: 0.9em;
+  color: var(--color-muted);
+}
+
+/* The "Footnotes" heading is for screen readers only. */
+.footnotes h2,
+[data-footnotes] h2 {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.footnotes ol,
+[data-footnotes] ol {
+  padding-left: 1.2rem;
+}
+
+.footnotes li::marker,
+[data-footnotes] li::marker {
+  color: var(--color-mark);
+}
+
+/* ── Post metadata ───────────────────────────────────────────────────────
+   The date sits ABOVE the title, in small letter-spaced monospace caps.   */
+
+.post-meta {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-bottom: 0.7rem;
+}
+
+.post-summary {
+  color: var(--color-muted);
+  font-style: italic;
+  margin-top: -0.9rem;
+  margin-bottom: 2rem;
+}
+
+/* ── Writing index ───────────────────────────────────────────────────────
+   Date column on the left, title on the right — reads like an index
+   rather than a feed.                                                      */
+
+.year-group {
+  margin-bottom: 1rem;
+}
+
+.year-heading {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  color: var(--color-muted);
+  margin: 0 0 0.5rem;
+}
+
+.post-list {
+  list-style: none;
+  margin: 0 0 1.75rem;
+  padding: 0;
+}
+
+.post-list li {
+  display: grid;
+  grid-template-columns: 3.75rem 1fr;
+  gap: 0 0.9rem;
+  align-items: baseline;
+  margin-bottom: 0.45em;
+}
+
+.post-list li::before {
+  content: none;
+}
+
+.post-list time {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+
+.site-footer {
+  margin-top: 4.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-rule);
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1.15rem;
+}
+
+.site-footer a {
+  color: var(--color-muted);
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  color: var(--color-accent);
+}
+
+/* ── Small screens ───────────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  body {
+    font-size: 17px;
+  }
+
+  .page {
+    padding: 2.25rem 1.25rem 3rem;
+  }
+
+  .site-header {
+    margin-bottom: 2.5rem;
+  }
+
+  h1 {
+    font-size: 1.4rem;
+  }
+
+  .post-list li {
+    grid-template-columns: 1fr;
+    gap: 0.1rem;
+    margin-bottom: 0.9em;
+  }
+}
+
+/* ── Print ───────────────────────────────────────────────────────────────── */
+
+@media print {
+  .site-footer {
+    display: none;
+  }
+
+  .page {
+    max-width: none;
+    padding: 0;
+  }
+
+  a {
+    text-decoration: none;
+  }
+}
+
+/* ==========================================================================
+   Optional: self-hosted EB Garamond
+   To use it — download eb-garamond-{regular,italic}.woff2 into public/fonts,
+   uncomment this block, and flip the --font-serif line at the top.
+   Self-hosting keeps the site free of third-party requests.
+   ==========================================================================
+
+@font-face {
+  font-family: "EB Garamond";
+  src: url("/fonts/eb-garamond-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "EB Garamond";
+  src: url("/fonts/eb-garamond-italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+*/
+

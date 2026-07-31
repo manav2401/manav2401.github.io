@@ -1,0 +1,20 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+*.log
+bun-debug.log*
+
+# environment
+.env
+.env.production
+
+# macOS
+.DS_Store
+
+# Leftovers from the Jekyll experiment — delete this folder, then this line
+_to_delete/

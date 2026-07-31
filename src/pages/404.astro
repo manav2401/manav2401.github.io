@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../config';
+---
+
+<Base title="Not found" description="That page doesn't exist.">
+  <h1>Not found</h1>
+  <p>
+    That page doesn't exist. Try the <a href={url('/')}>homepage</a> or have a look at the
+    <a href={url('/writing')}>writing</a>.
+  </p>
+</Base>

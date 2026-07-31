@@ -1,0 +1,22 @@
+---
+import Base from './Base.astro';
+import { formatDate } from '../config';
+
+interface Props {
+  title: string;
+  date: Date;
+  summary?: string;
+}
+
+const { title, date, summary } = Astro.props;
+---
+
+<Base title={title} description={summary} back={{ label: 'writing', href: '/writing' }}>
+  <article>
+    <time class="post-meta" datetime={date.toISOString()}>{formatDate(date)}</time>
+    <h1>{title}</h1>
+    {summary && <p class="post-summary">{summary}</p>}
+
+    <slot />
+  </article>
+</Base>

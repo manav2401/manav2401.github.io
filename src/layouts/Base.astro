@@ -1,0 +1,85 @@
+---
+import '../styles/global.css';
+import { site, links, url } from '../config';
+
+interface Props {
+  /** Browser tab title. The site name is appended automatically. */
+  title?: string;
+  description?: string;
+  /**
+   * The back link shown top-left. Defaults to home; a post overrides it to
+   * point at the section it belongs to, so you go up one level rather than
+   * all the way out.
+   */
+  back?: { label: string; href: string };
+}
+
+const { title, description = site.description, back } = Astro.props;
+const backLink = back ?? { label: 'home', href: '/' };
+
+const pageTitle = title ? `${title} — ${site.name}` : site.name;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://example.com');
+
+// The homepage shows no header — your name is the <h1> there instead.
+const here = Astro.url.pathname;
+const isHome = here === url('/');
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical.href} />
+    <link rel="icon" href={url('favicon.svg')} type="image/svg+xml" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={site.name}
+      href={url('rss.xml')}
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical.href} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="generator" content={Astro.generator} />
+  </head>
+
+  <body>
+    <div class="page">
+      {
+        /* No header on the homepage — there's nowhere to go back to. */
+        !isHome && (
+          <header class="site-header">
+            <a class="back" href={url(backLink.href)}>
+              <span class="back-arrow" aria-hidden="true">&#8592;</span>
+              <span class="back-label">{backLink.label}</span>
+            </a>
+          </header>
+        )
+      }
+
+      <main>
+        <slot />
+      </main>
+
+      <footer class="site-footer">
+        {
+          links.map((link) => (
+            <a
+              href={link.href.startsWith('/') ? url(link.href) : link.href}
+              rel={link.href.startsWith('http') ? 'me noopener' : undefined}
+            >
+              {link.label}
+            </a>
+          ))
+        }
+      </footer>
+    </div>
+  </body>
+</html>
